@@ -36,6 +36,13 @@ int main()
         glfwPollEvents();
     }
 
+    float vertices[] = {
+        0.5f,  0.5f, 0.0f,  // Top-Right
+        0.5f, -0.5f, 0.0f,  // Bottom-Right
+       -0.5f, -0.5f, 0.0f,  // Bottom-Left
+       -0.5f,  0.5f, 0.0f   // Top-Left
+   };
+
     glfwTerminate();
     return 0;
 }
