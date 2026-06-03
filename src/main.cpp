@@ -37,7 +37,7 @@ int main()
     }
 
     // vertex shader
-    std::string vertStr = readFile("shader/vertexshader.txt");
+    std::string vertStr = readFile("shader/vertexshader.vert");
     const char* vertexShaderSource = vertStr.c_str();
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader,1,&vertexShaderSource,NULL);
