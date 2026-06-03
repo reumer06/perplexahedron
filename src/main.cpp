@@ -32,16 +32,12 @@ int main()
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
+
+        glClearColor(0.2f,0.3f,0.3f,1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    float vertices[] = {
-        0.5f,  0.5f, 0.0f,  // Top-Right
-        0.5f, -0.5f, 0.0f,  // Bottom-Right
-       -0.5f, -0.5f, 0.0f,  // Bottom-Left
-       -0.5f,  0.5f, 0.0f   // Top-Left
-   };
 
     glfwTerminate();
     return 0;
