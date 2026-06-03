@@ -67,6 +67,20 @@ int main()
         std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}", infoLog);
     }
 
+    // link shaders
+    unsigned int shaderProgram{glCreateProgram()};
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram,GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::println("ERROR: FAILED TO LINK SHADERS {}", infoLog);
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
