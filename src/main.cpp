@@ -5,12 +5,14 @@
 #include <sstream>
 #include <string>
 
-std::string readFile(const char* path);
-void framebuffer_size_callback(GLFWwindow* window,int width,int height);
-void process_input(GLFWwindow* window);
+std::string readFile(const char *path);
 
-const unsigned int SCR_HEIGHT { 600 };
-const unsigned int SCR_WIDTH  { 800 };
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+
+void process_input(GLFWwindow *window);
+
+const unsigned int SCR_HEIGHT{600};
+const unsigned int SCR_WIDTH{800};
 
 int main()
 {
@@ -28,46 +30,47 @@ int main()
         return -1;
     }
 
-    glfwMakeContextCurrent(window);  // bind window context to calling thread
-    glfwSetFramebufferSizeCallback(window,framebuffer_size_callback);
+    glfwMakeContextCurrent(window); // bind window context to calling thread
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::println("Failed to initialize GLAD");
         return -1;
     }
 
     // vertex shader
-    std::string vertStr { readFile("shader/vertexshader.vert") };
-    const char* vertexShaderSource  {vertStr.c_str()};
-    unsigned int vertexShader { glCreateShader(GL_VERTEX_SHADER) };
-    glShaderSource(vertexShader,1,&vertexShaderSource,NULL);
+    std::string vertStr{readFile("shader/vertexshader.vert")};
+    const char *vertexShaderSource{vertStr.c_str()};
+    unsigned int vertexShader{glCreateShader(GL_VERTEX_SHADER)};
+    glShaderSource(vertexShader, 1, &vertexShaderSource,NULL);
     glCompileShader(vertexShader);
 
     int success;
     char infoLog[512];
-    glGetShaderiv(vertexShader,GL_COMPILE_STATUS,&success);
+
+    glGetShaderiv(vertexShader,GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(vertexShader,512,NULL,infoLog);
-        std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}",infoLog);
+        glGetShaderInfoLog(vertexShader, 512,NULL, infoLog);
+        std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}", infoLog);
     }
 
     // fragment shader
-    std::string fragStr { readFile("shader/fragmentshader.frag") };
-    const char* fragmentShaderSource { fragStr.c_str()};
-    unsigned int fragmentShader { glCreateShader(GL_FRAGMENT_SHADER) };
-    glShaderSource(fragmentShader,1,&fragmentShaderSource,NULL);
+    std::string fragStr{readFile("shader/fragmentshader.frag")};
+    const char *fragmentShaderSource{fragStr.c_str()};
+    unsigned int fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource,NULL);
     glCompileShader(fragmentShader);
 
-    glGetShaderiv(fragmentShader,GL_COMPILE_STATUS,&success);
+    glGetShaderiv(fragmentShader,GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(fragmentShader,512,NULL,infoLog);
-        std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}",infoLog);
+        glGetShaderInfoLog(fragmentShader, 512,NULL, infoLog);
+        std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}", infoLog);
     }
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
-        glClearColor(1.0f,0.0f,1.0f,1.0f);
+        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -82,24 +85,24 @@ std::string readFile(const char *path)
 {
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::println("fail to open file {} \n",path);
+        std::println("fail to open file {} \n", path);
         return "";
     }
     std::stringstream stream;
     stream << file.rdbuf(); // read buffer to stream
     file.close();
-    return stream.str();    // convert to string
+    return stream.str(); // convert to string
 }
 
 
 void process_input(GLFWwindow *window)
 {
     if (glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window,true);
+        glfwSetWindowShouldClose(window, true);
     }
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-    glViewport(0,0,width,height);
+    glViewport(0, 0, width, height);
 }
