@@ -9,8 +9,8 @@ std::string readFile(const char* path);
 void framebuffer_size_callback(GLFWwindow* window,int width,int height);
 void process_input(GLFWwindow* window);
 
-const unsigned int SCR_HEIGHT = 600;
-const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT { 600 };
+const unsigned int SCR_WIDTH  { 800 };
 
 int main()
 {
@@ -37,9 +37,9 @@ int main()
     }
 
     // vertex shader
-    std::string vertStr = readFile("shader/vertexshader.vert");
-    const char* vertexShaderSource = vertStr.c_str();
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    std::string vertStr { readFile("shader/vertexshader.vert") };
+    const char* vertexShaderSource  {vertStr.c_str()};
+    unsigned int vertexShader { glCreateShader(GL_VERTEX_SHADER) };
     glShaderSource(vertexShader,1,&vertexShaderSource,NULL);
     glCompileShader(vertexShader);
 
@@ -48,6 +48,19 @@ int main()
     glGetShaderiv(vertexShader,GL_COMPILE_STATUS,&success);
     if (!success) {
         glGetShaderInfoLog(vertexShader,512,NULL,infoLog);
+        std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}",infoLog);
+    }
+
+    // fragment shader
+    std::string fragStr { readFile("shader/fragmentshader.frag") };
+    const char* fragmentShaderSource { fragStr.c_str()};
+    unsigned int fragmentShader { glCreateShader(GL_FRAGMENT_SHADER) };
+    glShaderSource(fragmentShader,1,&fragmentShaderSource,NULL);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader,GL_COMPILE_STATUS,&success);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader,512,NULL,infoLog);
         std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}",infoLog);
     }
 
