@@ -85,7 +85,7 @@ int main()
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f
+        -0.5f, 0.5f, 0.0f
     };
     unsigned int indices[]{
         0, 1, 3,
@@ -114,7 +114,7 @@ int main()
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
-        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
