@@ -36,8 +36,8 @@ int main()
         return -1;
     }
 
-    // vertex shader
-    std::string vertStr{readFile("shader/vertexshader.vert")};
+    // vertex shaders
+    std::string vertStr{readFile("shaders/vertexshader.vert")};
     const char *vertexShaderSource{vertStr.c_str()};
     unsigned int vertexShader{glCreateShader(GL_VERTEX_SHADER)};
     glShaderSource(vertexShader, 1, &vertexShaderSource,NULL);
@@ -52,8 +52,8 @@ int main()
         std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}", infoLog);
     }
 
-    // fragment shader
-    std::string fragStr{readFile("shader/fragmentshader.frag")};
+    // fragment shaders
+    std::string fragStr{readFile("shaders/fragmentshader.frag")};
     const char *fragmentShaderSource{fragStr.c_str()};
     unsigned int fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
     glShaderSource(fragmentShader, 1, &fragmentShaderSource,NULL);
