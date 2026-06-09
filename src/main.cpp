@@ -5,16 +5,16 @@
 #include <sstream>
 #include <string>
 
-std::string readFile(const char *path);
+std::string readFile(const GLchar *path);
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
 void process_input(GLFWwindow *window);
 
-const unsigned int SCR_HEIGHT{600};
-const unsigned int SCR_WIDTH{800};
+const GLuint SCR_HEIGHT{600};
+const GLuint SCR_WIDTH{800};
 
-int main()
+GLint main()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -40,13 +40,13 @@ int main()
 
     // vertex shaders
     std::string vertStr{readFile("shaders/vertexshader.vert")};
-    const char *vertexShaderSource{vertStr.c_str()};
-    unsigned int vertexShader{glCreateShader(GL_VERTEX_SHADER)};
+    const GLchar *vertexShaderSource{vertStr.c_str()};
+    GLuint vertexShader{glCreateShader(GL_VERTEX_SHADER)};
     glShaderSource(vertexShader, 1, &vertexShaderSource,NULL);
     glCompileShader(vertexShader);
 
-    int success;
-    char infoLog[512];
+    GLint success;
+    GLchar infoLog[512];
 
     glGetShaderiv(vertexShader,GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -56,8 +56,8 @@ int main()
 
     // fragment shaders
     std::string fragStr{readFile("shaders/fragmentshader.frag")};
-    const char *fragmentShaderSource{fragStr.c_str()};
-    unsigned int fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
+    const GLchar *fragmentShaderSource{fragStr.c_str()};
+    GLuint fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
     glShaderSource(fragmentShader, 1, &fragmentShaderSource,NULL);
     glCompileShader(fragmentShader);
 
@@ -68,7 +68,7 @@ int main()
     }
 
     // link shaders
-    unsigned int shaderProgram{glCreateProgram()};
+    GLuint shaderProgram{glCreateProgram()};
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
@@ -83,18 +83,18 @@ int main()
     glDeleteShader(fragmentShader);
 
     // vertex data
-    float vertices[]{
+    GLfloat vertices[]{
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
         -0.5f, 0.5f, 0.0f
     };
-    unsigned int indices[]{
+    GLuint indices[]{
         0, 1, 3,
         1, 2, 3
     };
 
-    unsigned int VBO, VAO, EBO;
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -139,7 +139,7 @@ int main()
 }
 
 
-std::string readFile(const char *path)
+std::string readFile(const GLchar *path)
 {
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -160,7 +160,7 @@ void process_input(GLFWwindow *window)
     }
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height)
 {
     glViewport(0, 0, width, height);
 }
