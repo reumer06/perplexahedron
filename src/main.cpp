@@ -5,14 +5,14 @@
 #include <sstream>
 #include <string>
 
-std::string readFile(const char *path);
+std::string readFile(const GLchar *path);
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 void process_input(GLFWwindow *window);
 
-const unsigned int SCR_HEIGHT{600};
-const unsigned int SCR_WIDTH{800};
+const GLuint SCR_HEIGHT{600};
+const GLuint SCR_WIDTH{800};
 
 int main()
 {
@@ -38,7 +38,7 @@ int main()
 
     // vertex shaders
     std::string vertStr{readFile("shaders/vertexshader.vert")};
-    const char *vertexShaderSource{vertStr.c_str()};
+    const GLchar *vertexShaderSource{vertStr.c_str()};
     GLuint vertexShader{glCreateShader(GL_VERTEX_SHADER)};
     glShaderSource(vertexShader, 1, &vertexShaderSource,NULL);
     glCompileShader(vertexShader);
@@ -54,7 +54,7 @@ int main()
 
     // fragment shaders
     std::string fragStr{readFile("shaders/fragmentshader.frag")};
-    const char *fragmentShaderSource{fragStr.c_str()};
+    const GLchar *fragmentShaderSource{fragStr.c_str()};
     GLuint fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
     glShaderSource(fragmentShader, 1, &fragmentShaderSource,NULL);
     glCompileShader(fragmentShader);
@@ -137,7 +137,7 @@ int main()
 }
 
 
-std::string readFile(const char *path)
+std::string readFile(const GLchar *path)
 {
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -158,7 +158,7 @@ void process_input(GLFWwindow *window)
     }
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height)
 {
     glViewport(0, 0, width, height);
 }
