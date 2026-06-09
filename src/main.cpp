@@ -39,12 +39,12 @@ int main()
     // vertex shaders
     std::string vertStr{readFile("shaders/vertexshader.vert")};
     const char *vertexShaderSource{vertStr.c_str()};
-    unsigned int vertexShader{glCreateShader(GL_VERTEX_SHADER)};
+    GLuint vertexShader{glCreateShader(GL_VERTEX_SHADER)};
     glShaderSource(vertexShader, 1, &vertexShaderSource,NULL);
     glCompileShader(vertexShader);
 
-    int success;
-    char infoLog[512];
+    GLint success;
+    GLchar infoLog[512];
 
     glGetShaderiv(vertexShader,GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -55,7 +55,7 @@ int main()
     // fragment shaders
     std::string fragStr{readFile("shaders/fragmentshader.frag")};
     const char *fragmentShaderSource{fragStr.c_str()};
-    unsigned int fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
+    GLuint fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
     glShaderSource(fragmentShader, 1, &fragmentShaderSource,NULL);
     glCompileShader(fragmentShader);
 
@@ -66,7 +66,7 @@ int main()
     }
 
     // link shaders
-    unsigned int shaderProgram{glCreateProgram()};
+    GLuint shaderProgram{glCreateProgram()};
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
@@ -81,18 +81,18 @@ int main()
     glDeleteShader(fragmentShader);
 
     // vertex data
-    float vertices[]{
+    GLfloat vertices[]{
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
         -0.5f, 0.5f, 0.0f
     };
-    unsigned int indices[]{
+    GLuint indices[]{
         0, 1, 3,
         1, 2, 3
     };
 
-    unsigned int VBO, VAO, EBO;
+    GLuint VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
