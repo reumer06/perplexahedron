@@ -7,14 +7,14 @@
 
 std::string readFile(const GLchar *path);
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
 void process_input(GLFWwindow *window);
 
 const GLuint SCR_HEIGHT{600};
 const GLuint SCR_WIDTH{800};
 
-int main()
+GLint main()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -35,6 +35,8 @@ int main()
         std::println("Failed to initialize GLAD");
         return -1;
     }
+
+    glEnable(GL_DEPTH_TEST);
 
     // vertex shaders
     std::string vertStr{readFile("shaders/vertexshader.vert")};
@@ -85,11 +87,14 @@ int main()
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f
+        -0.5f, 0.5f, 0.0f,
+        0.0f, 0.0f, 0.0f
     };
     GLuint indices[]{
-        0, 1, 3,
-        1, 2, 3
+        0, 3, 4,
+        4, 2, 1,
+        0, 1, 4,
+        3, 4, 2
     };
 
     GLuint VBO, VAO, EBO;
@@ -110,18 +115,18 @@ int main()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 16, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
