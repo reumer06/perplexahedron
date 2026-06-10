@@ -87,11 +87,14 @@ GLint main()
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f
+        -0.5f, 0.5f, 0.0f,
+        0.0f, 0.0f, 0.0f
     };
     GLuint indices[]{
-        0, 1, 3,
-        1, 2, 3
+        0, 3, 4,
+        4, 2, 1,
+        0, 1, 4,
+        3, 4, 2
     };
 
     GLuint VBO, VAO, EBO;
@@ -112,7 +115,7 @@ GLint main()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
@@ -123,7 +126,7 @@ GLint main()
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
 
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 16, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
