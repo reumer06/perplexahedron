@@ -84,11 +84,12 @@ GLint main()
 
     // vertex data
     GLfloat vertices[]{
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
-        0.0f, 0.0f, 0.0f
+        // positions         // colors
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, // top left
+        0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f // center
     };
     GLuint indices[]{
         0, 3, 4,
@@ -110,8 +111,11 @@ GLint main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices,GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *) 0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT,GL_FALSE, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -126,15 +130,15 @@ GLint main()
         glUseProgram(shaderProgram);
 
         // update the uniform color
-        GLfloat timeValue{static_cast<GLfloat>(glfwGetTime())};
-        GLfloat colorValue{
-            sin(timeValue) / 2.0f + 0.5f // value stays between 0.0f to 1.0f
-        };
-        GLint vertexColorLocation{glGetUniformLocation(shaderProgram, "vecColor")};
-        glUniform4f(vertexColorLocation, colorValue, 0.0f, colorValue, 1.0f);
+        // GLfloat timeValue{static_cast<GLfloat>(glfwGetTime())};
+        // GLfloat colorValue{
+        //     sin(timeValue) / 2.0f + 0.5f // value stays between 0.0f to 1.0f
+        // };
+        // GLint vertexColorLocation{glGetUniformLocation(shaderProgram, "vecColor")};
+        // glUniform4f(vertexColorLocation, colorValue, 0.0f, colorValue, 1.0f);
 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 16, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
