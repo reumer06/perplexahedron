@@ -124,13 +124,25 @@ GLint main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
 
+        // update the uniform color
+        GLfloat timeValue{static_cast<GLfloat>(glfwGetTime())};
+        GLfloat colorValue{
+            sin(timeValue) / 2.0f + 0.5f // value stays between 0.0f to 1.0f
+        };
+        GLint vertexColorLocation{glGetUniformLocation(shaderProgram, "vecColor")};
+        glUniform4f(vertexColorLocation, colorValue, 0.0f, colorValue, 1.0f);
+
+        glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 16, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    // int attribute;        // get the max amount of separate layout inputs you can pass into shader
+    // glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &attribute);
+    // std::println("{}", attribute);
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
