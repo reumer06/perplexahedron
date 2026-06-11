@@ -1,7 +1,7 @@
 #version 330 core
 out vec4 fragColor;
-uniform vec4 vecColor; // global var
+in vec3 ourColor;
 
 void main() {
-    fragColor = vecColor;
+    fragColor = vec4(ourColor, 1.0);
 }
