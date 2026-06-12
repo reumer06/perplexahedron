@@ -134,11 +134,7 @@ GLint main()
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }
-
-    // int attribute;        // get the max amount of separate layout inputs you can pass into shader
-    // glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &attribute);
-    // std::println("{}", attribute);
+    };
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
