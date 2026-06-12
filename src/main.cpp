@@ -129,14 +129,6 @@ GLint main()
 
         glUseProgram(shaderProgram);
 
-        // update the uniform color
-        // GLfloat timeValue{static_cast<GLfloat>(glfwGetTime())};
-        // GLfloat colorValue{
-        //     sin(timeValue) / 2.0f + 0.5f // value stays between 0.0f to 1.0f
-        // };
-        // GLint vertexColorLocation{glGetUniformLocation(shaderProgram, "vecColor")};
-        // glUniform4f(vertexColorLocation, colorValue, 0.0f, colorValue, 1.0f);
-
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
