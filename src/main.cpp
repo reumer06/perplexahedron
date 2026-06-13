@@ -11,7 +11,7 @@ void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
 void process_input(GLFWwindow *window);
 
-const GLuint SCR_HEIGHT{600};
+const GLuint SCR_HEIGHT{800};
 const GLuint SCR_WIDTH{800};
 
 GLint main()
