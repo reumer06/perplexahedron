@@ -65,5 +65,26 @@ public:
     {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
+
+private:
+    void checkCompileErrors(GLuint shader, std::string type)
+    {
+        GLint success;
+        GLchar infoLog[512];
+
+        if (type != "PROGRAM") {
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+            if (!success) {
+                glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+                std::println("ERROR: FAIL TO COMPILE SHADERS: {} \n infoLog: {}", type, infoLog);
+            }
+        } else {
+            glGetProgramiv(shader, GL_LINK_STATUS, &success);
+            if (!success) {
+                glGetProgramiv(shader, 1024,NULL, &infoLog);
+                std::println("ERROR: FAIL TO LINK SHADERS: {} \n infoLog: {}", type, infoLog);
+            }
+        }
+    }
 };
 #endif
