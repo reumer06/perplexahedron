@@ -1,11 +1,7 @@
 #include "glad.h"
 #include <GLFW/glfw3.h>
 #include <print>
-#include <fstream>
-#include <sstream>
-#include <string>
-
-std::string readFile(const GLchar *path);
+#include "shader.h"
 
 void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
@@ -28,7 +24,7 @@ GLint main()
         return -1;
     }
 
-    glfwMakeContextCurrent(window); // bind window context to calling thread
+    glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
@@ -38,49 +34,8 @@ GLint main()
 
     glEnable(GL_DEPTH_TEST);
 
-    // vertex shaders
-    std::string vertStr{readFile("shaders/vertexshader.vert")};
-    const GLchar *vertexShaderSource{vertStr.c_str()};
-    GLuint vertexShader{glCreateShader(GL_VERTEX_SHADER)};
-    glShaderSource(vertexShader, 1, &vertexShaderSource,NULL);
-    glCompileShader(vertexShader);
-
-    GLint success;
-    GLchar infoLog[512];
-
-    glGetShaderiv(vertexShader,GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(vertexShader, 512,NULL, infoLog);
-        std::println("ERROR: FAILED TO COMPILE VERTEX SHADER {}", infoLog);
-    }
-
-    // fragment shaders
-    std::string fragStr{readFile("shaders/fragmentshader.frag")};
-    const GLchar *fragmentShaderSource{fragStr.c_str()};
-    GLuint fragmentShader{glCreateShader(GL_FRAGMENT_SHADER)};
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource,NULL);
-    glCompileShader(fragmentShader);
-
-    glGetShaderiv(fragmentShader,GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(fragmentShader, 512,NULL, infoLog);
-        std::println("ERROR: FAILED TO COMPILE FRAGMENT SHADER {}", infoLog);
-    }
-
-    // link shaders
-    GLuint shaderProgram{glCreateProgram()};
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    glGetProgramiv(shaderProgram,GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::println("ERROR: FAILED TO LINK SHADERS {}", infoLog);
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    // load shaders using class
+    Shader shaders{"shaders/vertexshader.vert", "shaders/fragmentshader.frag"};
 
     // vertex data
     GLfloat vertices[]{
@@ -119,7 +74,6 @@ GLint main()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
@@ -127,7 +81,7 @@ GLint main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(shaderProgram);
+        shaders.use();
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
@@ -139,26 +93,11 @@ GLint main()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(shaders.ID);
 
     glfwTerminate();
     return 0;
 }
-
-
-std::string readFile(const GLchar *path)
-{
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        std::println("fail to open file {} \n", path);
-        return "";
-    }
-    std::stringstream stream;
-    stream << file.rdbuf(); // read buffer to stream
-    file.close();
-    return stream.str(); // convert to string
-}
-
 
 void process_input(GLFWwindow *window)
 {
