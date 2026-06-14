@@ -7,11 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-add_library(glad_lib STATIC glad/glad.c
-        shader.h)
+add_library(glad_lib STATIC glad/glad.c)
 target_include_directories(glad_lib PUBLIC glad)
 
-add_executable(program src/main.cpp glad/glad.c
-        shader.h)
-target_include_directories(program PRIVATE glad)
+add_executable(program src/main.cpp glad/glad.c)
+target_include_directories(program PRIVATE glad headers)
 target_link_libraries(program PRIVATE glfw OpenGL::GL glad_lib)
