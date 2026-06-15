@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <print>
 #include "shader.h"
+#include "stb_image.h"
 
 void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
@@ -32,9 +33,8 @@ GLint main()
         return -1;
     }
 
-    glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_DEPTH_TEST);
 
-    // load shaders using class
     Shader shaders{"shaders/vertexshader.vert", "shaders/fragmentshader.frag"};
 
     // vertex data
