@@ -39,11 +39,11 @@ GLint main()
 
     // vertex data
     GLfloat vertices[]{
-        // positions         // colors
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
-        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, // top left
+        // positions         // colors      // texture
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
         0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f // center
     };
     GLuint indices[]{
@@ -87,13 +87,22 @@ GLint main()
 
     GLint width, height, nrChannels;
 
-    unsigned char *data = stbi_load("..resources/laughingbaby.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("resources/laughingbaby.jpg", &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,GL_RGB,GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::println("Failed to load texture");
+    }
+    stbi_image_free(data);
 
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         shaders.use();
 
