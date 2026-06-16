@@ -46,6 +46,7 @@ GLint main()
         -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
         0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.5f, 0.5f // center
     };
+
     GLuint indices[]{
         0, 3, 4,
         4, 2, 1,
