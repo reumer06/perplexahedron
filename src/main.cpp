@@ -93,14 +93,18 @@ GLint main()
 
     GLint width, height, nrChannels;
 
-    unsigned char *data = stbi_load("resources/laughingbaby.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("resources/squares.png", &width, &height, &nrChannels, 4);
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,GL_RGB,GL_UNSIGNED_BYTE, data);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
         std::println("Failed to load texture");
     }
+
     stbi_image_free(data);
+
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
