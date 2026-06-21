@@ -36,14 +36,52 @@ int main()
         return -1;
     }
 
+    glEnable(GL_DEPTH_TEST);
+
     Shader shaders{"shaders/vertexshader.vert", "shaders/fragmentshader.frag"};
 
-    GLfloat vertices[]{
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-        0.0f, 0.0f, 0.0f, 0.5f, 0.5f
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 1.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f,
+        0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f,
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f,
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f
     };
 
     GLuint indices[]{
@@ -106,17 +144,27 @@ int main()
 
         glBindTexture(GL_TEXTURE_2D, texture);
 
-        glm::mat4 transform{glm::mat4(1.0f)};
-        transform = glm::rotate(transform, (float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
         shaders.use();
+
+        glm::mat4 model{glm::mat4(1.0f)};
+        glm::mat4 view{glm::mat4(1.0f)};
+        glm::mat4 projection{glm::mat4(1.0f)};
+        model = glm::rotate(model, (float) glfwGetTime() * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        projection = glm::perspective(glm::radians(35.0f), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
+
+        GLuint modelLoc = glGetUniformLocation(shaders.ID, "model");
+        GLuint viewLoc = glGetUniformLocation(shaders.ID, "view");
+
+        glUniformMatrix4fv(modelLoc, 1,GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1,GL_FALSE, &view[0][0]);
+
+        shaders.setMat4("projection", projection);
+
         shaders.setInt("texture1", 0);
 
-        GLuint transformLoc = glGetUniformLocation(shaders.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
