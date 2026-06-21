@@ -61,6 +61,11 @@ public:
     }
 
     // utility functions
+    void use() const
+    {
+        glUseProgram(ID);
+    }
+
     void setBool(const std::string &name, bool value) const
     {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int) value);
