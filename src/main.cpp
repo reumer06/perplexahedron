@@ -36,6 +36,8 @@ int main()
         return -1;
     }
 
+    glEnable(GL_DEPTH_TEST);
+
     Shader shaders{"shaders/vertexshader.vert", "shaders/fragmentshader.frag"};
 
     GLfloat vertices[] = {
