@@ -172,7 +172,7 @@ int main()
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
 
-            float angle{20.0f * i};
+            float angle{20.0f * (i + 1)};
 
             model = glm::rotate(model, (float) glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             shaders.setMat4("model", model);
