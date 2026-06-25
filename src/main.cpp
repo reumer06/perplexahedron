@@ -159,9 +159,18 @@ int main()
 
         glm::mat4 view{glm::mat4(1.0f)};
         glm::mat4 projection{glm::mat4(1.0f)};
+
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         projection = glm::perspective(glm::radians(55.0f), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
 
+        glm::vec3 cameraPos{glm::vec3(0.0f, 0.0f, 3.0f)};
+        glm::vec3 cameraTarget{glm::vec3(0.0f, 0.0f, 0.0f)};
+        glm::vec3 cameraBack{glm::normalize(cameraPos - cameraTarget)};
+
+        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 cameraX{glm::normalize(glm::cross(up, cameraBack))};
+
+        glm::vec3 cameraY{glm::cross(cameraBack, cameraX)};
 
         shaders.setMat4("projection", projection);
         shaders.setInt("texture1", 0);
