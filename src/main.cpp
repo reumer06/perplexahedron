@@ -19,6 +19,9 @@ glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
+float deltaTime{0.0f};
+float lastFrame{0.0f};
+
 
 int main()
 {
@@ -145,6 +148,10 @@ int main()
     stbi_image_free(data);
 
     while (!glfwWindowShouldClose(window)) {
+        float currentFrame{static_cast<float>(glfwGetTime())};
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
         process_input(window);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -193,7 +200,7 @@ int main()
 void process_input(GLFWwindow *window)
 {
     auto pos = cameraPos;
-    const float cameraSpeed = 0.0005f;
+    const float cameraSpeed = 2.5 * deltaTime;
     if (glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
     std::println("{}, {}, {}", pos.x, pos.y, pos.z);
