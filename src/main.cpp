@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
@@ -191,9 +192,11 @@ int main()
 
 void process_input(GLFWwindow *window)
 {
-    const float cameraSpeed = 0.005f;
+    auto pos = cameraPos;
+    const float cameraSpeed = 0.0005f;
     if (glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
+    std::println("{}, {}, {}", pos.x, pos.y, pos.z);
     if (glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS)
