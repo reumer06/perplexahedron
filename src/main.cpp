@@ -23,7 +23,12 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 float deltaTime{0.0f};
 float lastFrame{0.0f};
-float yaw{-90.9f};
+
+float yaw{-90.0f};
+float pitch{0.0f};
+bool firstMouse{true};
+float lastX{800.f / 2};
+float lastY{800.f / 2};
 
 
 int main()
@@ -222,4 +227,25 @@ void process_input(GLFWwindow *window)
 void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height)
 {
     glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow *window, double xpos, double ypos)
+{
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = ypos - lastY;
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity{0.1f};
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
 }
