@@ -47,6 +47,7 @@ int main()
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     glfwSetInputMode(window,GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -242,7 +243,7 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity{0.1f};
+    float sensitivity{0.01f};
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
