@@ -54,6 +54,7 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     glfwSetInputMode(window,GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -178,13 +179,8 @@ int main()
 
         shaders.use();
 
-        glm::mat4 projection{glm::mat4(1.0f)};
-        projection = glm::perspective(glm::radians(55.0f), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
-
-        const float radius{2.0f};
-        const float speed{0.2f};
-        float camX = sin(glfwGetTime() * speed) * radius;
-        float camZ = cos(glfwGetTime() * speed) * radius;
+        glm::mat4 projection = glm::perspective(glm::radians(fov), (float) SCR_WIDTH / (float) SCR_HEIGHT, 1.0f,
+                                                100.0f);
         glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
         shaders.setMat4("projection", projection);
@@ -216,11 +212,9 @@ int main()
 
 void process_input(GLFWwindow *window)
 {
-    auto pos = cameraPos;
     const float cameraSpeed = 2.5 * deltaTime;
     if (glfwGetKey(window,GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
-    std::println("{}, {}, {}", pos.x, pos.y, pos.z);
     if (glfwGetKey(window,GLFW_KEY_A) == GLFW_PRESS)
         cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     if (glfwGetKey(window,GLFW_KEY_S) == GLFW_PRESS)
@@ -245,7 +239,7 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = ypos - lastY;
+    float yoffset = lastY - ypos;
     lastX = xpos;
     lastY = ypos;
 
@@ -266,4 +260,13 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     cameraFront = glm::normalize(direction);
+}
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    fov -= (float) yoffset;
+    if (fov < 1.0f)
+        fov = 1.0f;
+    if (fov > 45.0f)
+        fov = 45.0f;
 }
