@@ -12,9 +12,14 @@ void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+
 void process_input(GLFWwindow *window);
 
-const unsigned int SCR_HEIGHT{800};
+
+const
+
+unsigned int SCR_HEIGHT{800};
 const unsigned int SCR_WIDTH{800};
 
 glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -24,11 +29,12 @@ glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 float deltaTime{0.0f};
 float lastFrame{0.0f};
 
+bool firstMouse{true};
 float yaw{-90.0f};
 float pitch{0.0f};
-bool firstMouse{true};
 float lastX{800.f / 2};
 float lastY{800.f / 2};
+float fov = 45.0f;
 
 
 int main()
