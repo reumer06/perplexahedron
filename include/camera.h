@@ -45,6 +45,7 @@ public:
         WorldUp = up;
         Yaw = yaw;
         Pitch = pitch;
+        updateCameraVectors();
     }
 
     // scalar constructor
@@ -55,6 +56,7 @@ public:
         WorldUp = glm::vec3(upX, upY, upZ);
         Yaw = yaw;
         Pitch = pitch;
+        updateCameraVectors();
     }
 
     glm::mat4 GetViewMatrix()
@@ -76,6 +78,16 @@ public:
             if (Pitch < -89.0f)
                 Pitch - -89.0f;
         }
+        updateCameraVectors();
+    }
+
+    void processMouseScroll(float yoffset)
+    {
+        Zoom -= (float) yoffset;
+        if (Zoom < 1.0f)
+            Zoom = 1.0f;
+        if (Zoom > 45.0f)
+            Zoom = 45.0f;
     }
 
 private:
@@ -85,7 +97,7 @@ private:
         front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
         front.y = sin(glm::radians(Pitch));
         front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-        Front = glm::normalize(front)
+        Front = glm::normalize(front);
 
         Right = glm::normalize(glm::cross(Front, WorldUp));
         Up = glm::normalize(glm::cross(Right, Front));
