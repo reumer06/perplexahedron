@@ -64,6 +64,19 @@ public:
         glm::lookAt(Position, Position + Front, Up);
     }
 
+    void processKeyboard(Camera_Movement direction, float deltaTime)
+    {
+        float velocity = MovementSpeed * deltaTime;
+        if (direction == FORWARD)
+            Position += Front * velocity;
+        if (direction == BACKWARD)
+            Position -= Front * velocity;
+        if (direction == LEFT)
+            Position -= Right * velocity;
+        if (direction == RIGHT)
+            Position += Right * velocity;
+    }
+
     void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
     {
         xoffset += MouseSensitivity;
