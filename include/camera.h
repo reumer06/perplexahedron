@@ -56,6 +56,27 @@ public:
         Yaw = yaw;
         Pitch = pitch;
     }
+
+    glm::mat4 GetViewMatrix()
+    {
+        glm::lookAt(Position, Position + Front, Up);
+    }
+
+    void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
+    {
+        xoffset += MouseSensitivity;
+        yoffset += MouseSensitivity;
+
+        Yaw += xoffset;
+        Pitch += yoffset;
+
+        if (constrainPitch) {
+            if (Pitch > 89.0f)
+                Pitch = 89.0f;
+            if (Pitch < -89.0f)
+                Pitch - -89.0f;
+        }
+    }
 };
 
 
