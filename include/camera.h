@@ -1,8 +1,23 @@
-//
-// Created by shaik on 6/30/2026.
-//
+#ifndef CAMERA_H
+#define CAMERA_H
 
-#ifndef PLXH_CAMERA_H
-#define PLXH_CAMERA_H
+#include <glad/glad.h>
+#include<glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#endif //PLXH_CAMERA_H
+enum Camera_Movement
+{
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT
+};
+
+const float YAW{-90.0f};
+const float PITCH{0.0f};
+const float SPEED{2.5f};
+const float SENSITIVITY{0.1f};
+const float ZOOM{45.0f};
+
+
+#endif
