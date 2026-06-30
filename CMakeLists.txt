@@ -9,6 +9,7 @@ find_package(OpenGL REQUIRED)
 
 add_library(glad_lib STATIC headers/glad.c
         include/stb_image.cpp
+        include/camera.h
 )
 target_include_directories(glad_lib PUBLIC headers)
 

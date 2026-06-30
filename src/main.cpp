@@ -2,17 +2,32 @@
 #include <GLFW/glfw3.h>
 #include <print>
 #include "shader.h"
+#include "camera.h"
 #include "stb_image.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height);
 
-void process_input(GLFWwindow *window);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+
+void processInput(GLFWwindow *window);
+
 
 const unsigned int SCR_HEIGHT{800};
 const unsigned int SCR_WIDTH{800};
+
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX{SCR_WIDTH / 2.0f};
+float lastY{SCR_HEIGHT / 2.0f};
+bool firstMouse{true};
+
+float deltaTime{0.0f};
+float lastFrame{0.0f};
 
 int main()
 {
@@ -30,6 +45,10 @@ int main()
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    glfwSetInputMode(window,GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::println("Failed to initialize GLAD");
@@ -139,7 +158,11 @@ int main()
     stbi_image_free(data);
 
     while (!glfwWindowShouldClose(window)) {
-        process_input(window);
+        float currentFrame{static_cast<float>(glfwGetTime())};
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        processInput(window);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -148,26 +171,20 @@ int main()
 
         shaders.use();
 
-        glm::mat4 projection{glm::mat4(1.0f)};
-        projection = glm::perspective(glm::radians(55.0f), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
-
-        const float radius{10.0f};
-        const float speed{0.3f};
-        float camX = sin(glfwGetTime() * speed) * radius;
-        float camZ = cos(glfwGetTime() * speed) * radius;
-        glm::mat4 view = glm::lookAt(glm::vec3(camX, 0.0f, camZ),
-                                     glm::vec3(0.0f, 0.0f, 0.0f),
-                                     glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), (float) SCR_WIDTH / (float) SCR_HEIGHT,
+                                                1.0f,
+                                                100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
 
         shaders.setMat4("projection", projection);
         shaders.setInt("texture1", 0);
         shaders.setMat4("view", view);
 
         glBindVertexArray(VAO);
-        for (size_t i = 0; i < 10; ++i) {
+        for (size_t i = 0; i < 1; ++i) {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
-            float angle{20.0f * (i + 1)}; // ? how does the code determine how far should be each cube
+            float angle{20.0f * (i + 1)}; //
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             shaders.setMat4("model", model);
 
@@ -186,14 +203,46 @@ int main()
     return 0;
 }
 
-void process_input(GLFWwindow *window)
+void processInput(GLFWwindow *window)
 {
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.processKeyboard(Camera_Movement::FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.processKeyboard(Camera_Movement::BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.processKeyboard(Camera_Movement::LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.processKeyboard(Camera_Movement::RIGHT, deltaTime);
 }
 
 void framebuffer_size_callback(GLFWwindow *window, GLint width, GLint height)
 {
     glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
+{
+    float xpos{static_cast<float>(xposIn)};
+    float ypos{static_cast<float>(yposIn)};
+
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.processMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+    camera.processMouseScroll(static_cast<float>(yoffset));
 }
