@@ -48,6 +48,7 @@ public:
         if (direction == Camera_Movement::BACKWARD) Position -= Front * velocity;
         if (direction == Camera_Movement::LEFT) Position -= Right * velocity;
         if (direction == Camera_Movement::RIGHT) Position += Right * velocity;
+        Position.y = 0.0f;
     }
 
     void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
