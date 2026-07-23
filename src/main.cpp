@@ -202,6 +202,18 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+        lightshaders.use();
+        lightshaders.setMat4("projection", projection);
+        lightshaders.setMat4("view", view);
+
+        glm::mat4 lightModel = glm::mat4(1.0f);
+        lightModel = glm::translate(lightModel, lightPos);
+        lightModel = glm::scale(lightModel, glm::vec3(0.2f));
+        lightshaders.setMat4("model", lightModel);
+
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
