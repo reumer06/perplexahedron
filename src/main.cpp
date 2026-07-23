@@ -175,18 +175,21 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glBindTexture(GL_TEXTURE_2D, texture);
-
-        shaders.use();
-
         glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), (float) SCR_WIDTH / (float) SCR_HEIGHT,
                                                 1.0f,
                                                 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
+        shaders.use();
         shaders.setMat4("projection", projection);
         shaders.setInt("texture1", 0);
         shaders.setMat4("view", view);
+
+        shaders.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        shaders.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         glBindVertexArray(VAO);
         for (size_t i = 0; i < 1; ++i) {
