@@ -60,6 +60,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     Shader shaders{"shaders/vertexshader.vert", "shaders/fragmentshader.frag"};
+    Shader lightshaders("shaders/lightcube.vert", "shaders/lightcube.frag");
 
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
