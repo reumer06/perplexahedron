@@ -204,6 +204,7 @@ int main()
 
         lightshaders.use();
         lightshaders.setMat4("projection", projection);
+        lightshaders.setVec3("lightPos", lightPos);
         lightshaders.setMat4("view", view);
 
         glm::mat4 lightModel = glm::mat4(1.0f);
