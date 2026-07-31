@@ -12,7 +12,8 @@ void main() {
     float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
 
-    vec3 texColor = vec3(texture(texture1, texCoord));
+    vec3 norm = normalize(Normal);
+    vec3 lightDir = normalize(lightPos - FragPos);
 
     vec3 result = ambient * texColor;
     fragColor = vec4(result, 1.0);
