@@ -1,8 +1,9 @@
 #version 330 core
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 atexCoord;
+layout (location = 1) in vec2 aNormal;
 
-out vec2 texCoord;
+out vec3 FragPos;
+out vec3 Normal;
 
 uniform mat4 model;
 uniform mat4 projection;
