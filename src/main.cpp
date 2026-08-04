@@ -180,15 +180,10 @@ int main()
                                                 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
-        glm::mat4 model = glm::mat4(1.0f);
-
-        glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
-
         shaders.use();
         shaders.setMat4("projection", projection);
         shaders.setInt("texture1", 0);
         shaders.setMat4("view", view);
-        shaders.setMat3("normalMatrix", normalMatrix);
 
         shaders.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
         shaders.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
@@ -205,6 +200,9 @@ int main()
             float angle{20.0f * (i + 1)}; //
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             shaders.setMat4("model", model);
+
+            glm::mat3 normalMatrix{glm::transpose(glm::inverse(glm::mat3(model)))};
+            shaders.setMat3("normalMatrix", normalMatrix);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
