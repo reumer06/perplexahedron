@@ -192,6 +192,7 @@ int main()
 
         shaders.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
         shaders.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        shaders.setVec3("viewPos", camera.GetPosition());
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
