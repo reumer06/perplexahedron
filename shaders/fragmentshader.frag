@@ -21,6 +21,9 @@ void main() {
 
     float specularStrength = 0.5;
 
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+
     vec3 result = (ambient + diffuse) * objectColor;
     fragColor = vec4(result, 1.0);
 }
