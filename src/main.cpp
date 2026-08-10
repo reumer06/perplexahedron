@@ -172,35 +172,36 @@ int main()
 
         processInput(window);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
         lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), (float) SCR_WIDTH / (float) SCR_HEIGHT,
-                                                1.0f,
-                                                100.0f);
+                                                0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
 
         shaders.use();
         shaders.setMat4("projection", projection);
-        shaders.setInt("texture1", 0);
         shaders.setMat4("view", view);
 
-        shaders.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        // Light & camera uniforms
         shaders.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         shaders.setVec3("lightPos", lightPos);
         shaders.setVec3("viewPos", camera.GetPosition());
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        // material uniforms
+        shaders.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        shaders.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        shaders.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        shaders.setFloat("material.shininess", 32.0f);
 
         glBindVertexArray(VAO);
         for (size_t i = 0; i < 1; ++i) {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
-            float angle{20.0f * (i + 1)}; //
+            float angle{20.0f * (i + 1)};
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
             shaders.setMat4("model", model);
 
@@ -212,7 +213,6 @@ int main()
 
         lightshaders.use();
         lightshaders.setMat4("projection", projection);
-        lightshaders.setVec3("lightPos", lightPos);
         lightshaders.setMat4("view", view);
 
         glm::mat4 lightModel = glm::mat4(1.0f);
