@@ -9,6 +9,15 @@ uniform vec3 lightColor;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
+uniform Material material;
+
+
 void main() {
     float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
