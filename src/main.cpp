@@ -192,10 +192,10 @@ int main()
         shaders.setVec3("viewPos", camera.GetPosition());
 
         // material uniforms
-        shaders.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        shaders.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        shaders.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        shaders.setFloat("material.shininess", 32.0f);
+        shaders.setVec3("material.ambient", 0.135f, 0.2225f, 0.1575f);
+        shaders.setVec3("material.diffuse", 0.54f, 0.89f, 0.63f);
+        shaders.setVec3("material.specular", 0.316228f, 0.316228f, 0.316228f);
+        shaders.setFloat("material.shininess", 0.1f * 128.0f);
 
         glBindVertexArray(VAO);
         for (size_t i = 0; i < 1; ++i) {
