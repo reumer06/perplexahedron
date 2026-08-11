@@ -233,7 +233,9 @@ int main()
     glDeleteVertexArrays(1, &VAO);
     glDeleteVertexArrays(1, &lightVAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteTextures(1, &texture);
     glDeleteProgram(shaders.ID);
+    glDeleteProgram(lightshaders.ID);
 
     glfwTerminate();
     return 0;
