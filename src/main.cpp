@@ -186,13 +186,23 @@ int main()
         shaders.setMat4("projection", projection);
         shaders.setMat4("view", view);
 
-        // Light & camera uniforms
+        glm::vec3 lightColor;
+        lightColor.x = static_cast<float>(sin(glfwGetTime() * 2.0f) * 0.5f + 0.5f);
+        lightColor.y = static_cast<float>(sin(glfwGetTime() * 0.7f) * 0.5f + 0.5f);
+        lightColor.z = static_cast<float>(sin(glfwGetTime() * 1.3f) * 0.5f + 0.5f);
+
+        glm::vec3 diffuseColor{
+            lightColor * glm::vec3(0.5f)
+        };
+        glm::vec3 ambientColor{lightColor * glm::vec3(0.2f)};
+        glm::vec3 unitVec(1.0f);
+        shaders.setVec3("light.ambient", ambientColor);
+        shaders.setVec3("light.diffuse", diffuseColor);
+        shaders.setVec3("light.specular", glm::vec3(1.0f));
+
         shaders.setVec3("lightPos", lightPos);
         shaders.setVec3("viewPos", camera.GetPosition());
 
-        shaders.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-        shaders.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-        shaders.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         // material uniforms
         shaders.setVec3("material.ambient", 0.135f, 0.2225f, 0.1575f);
@@ -217,6 +227,8 @@ int main()
         lightshaders.use();
         lightshaders.setMat4("projection", projection);
         lightshaders.setMat4("view", view);
+
+        lightshaders.setVec3("lightColor", glm::vec3(1.0f));
 
         glm::mat4 lightModel = glm::mat4(1.0f);
         lightModel = glm::translate(lightModel, lightPos);
